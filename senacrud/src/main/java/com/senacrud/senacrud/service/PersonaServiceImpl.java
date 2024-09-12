@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 //Implementa los metodos abstractos de la interface
 @Service
 public class PersonaServiceImpl implements PersonaService{
@@ -20,7 +22,13 @@ public class PersonaServiceImpl implements PersonaService{
 
     @Override
     public Persona getById(Long id) {
-        return personaRepository.findById(id).get(); //equivalente a (select * from persona where id = :id)
+        Optional<Persona> persona = personaRepository.findById(id); //equivalente a (select * from persona where id = :id)
+        if(persona.isPresent()){
+            return persona.get();
+        } else {
+            System.out.println("La persona con id " + id + " no existe en base de datos");
+            return new Persona();
+        }
     }
 
     @Override
